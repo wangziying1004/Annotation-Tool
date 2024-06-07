@@ -1,0 +1,95 @@
+<!-- update_exact_data.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ folder_name }}</title>
+</head>
+<body>
+    <h1>{{ folder_name }}</h1>
+    <form id="uploadForm" method="POST" action="{% url 'show_exact_data' username=username folder_name=folder_name %}">
+        {% csrf_token %}
+        <input type="file" name="data" id="fileInput">
+        <input type="hidden" id="fileName" name="fileName">
+        <button type="button" onclick="submitForm()">Add_file</button>
+    </form>
+    <!-- 显示上传状态 -->
+    <div id="uploadStatus"></div>
+    <!--a href="{% url 'add_exact_data' username=username folder_name=folder_name %}"><button>Add</button></a-->
+    <ul>
+        {% for file in filelist %}
+        <li>{{ file }}
+            <form action="{% url 'delete_exact_data' username=username folder_name=folder_name %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="file_name" value="{{ file }}">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js";></script>
+    <script>
+        const folder_name_js = "{{ folder_name }}";
+        // 初始化 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB9d_LpVH9A9OU82xqp0Fuo-XhhjQMbksI",
+            authDomain: "ndc-annotation-tool.firebaseapp.com",
+            projectId: "ndc-annotation-tool",
+            storageBucket: "ndc-annotation-tool.appspot.com",
+            messagingSenderId: "30054694568",
+            appId: "1:30054694568:web:3a4900a7430212fcab8c9d",
+            measurementId: "G-MGCTELM2B1"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        function AddFiles() {
+            var fileInput = document.getElementById('fileInput');
+            var fileNameInput = document.getElementById('fileName');
+            //var folderName = folderInput.files[0].webkitRelativePath.split('/')[0];
+            //folderNameInput.value = folderName; // 获取文件夹名称
+
+            const File = fileInput.files[0];
+            const totalFiles = File.length;
+            let counter = 0; // 初始化计数器
+
+            if (totalFiles === 0) {
+                document.getElementById('uploadStatus').innerText = 'No files selected.';
+                return;
+            }
+
+            // 逐个上传文件
+
+            const uploadTask = storage.ref().child(`all_dataset_folder/${folder_name_js}/${File.name}`).put(File);
+
+            uploadTask.on('state_changed',
+                snapshot => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    document.getElementById('uploadStatus').innerText = `Uploading ${File.name}: ${progress.toFixed(2)}%`;
+                },
+                error => {
+                        // 上传失败
+                    document.getElementById('uploadStatus').innerText = `Error uploading ${File.name}: ${error.message}`;
+                },
+                () => {
+                        // 上传成功
+                    counter++; // 每上传成功一次，计数器加一
+                    document.getElementById('uploadStatus').innerText = `Upload complete: ${File.name}`;
+
+                        // 判断是否所有文件都上传完成
+                    if (counter === totalFiles) {
+                            // 所有文件上传完成，手动提交表单
+                        document.getElementById('uploadForm').submit();
+                    }
+                }
+            );
+        }
+
+
+        function submitForm() {
+            AddFiles(); // 调用上传函数
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Dataset</title>
+</head>
+<body>
+    <h3>{{ username }}, please add dataset</h3>
+
+    <!-- 文件夹上传表单 -->
+    <form id="uploadForm" method="POST" action="{% url 'add_dataset2' username=username %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="dataset" id="folderInput" webkitdirectory directory multiple>
+        <input type="hidden" id="folderName" name="folderName">
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <!-- 显示上传状态 -->
+    <div id="uploadStatus"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js";></script>
+    <script>
+        // 初始化 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB9d_LpVH9A9OU82xqp0Fuo-XhhjQMbksI",
+            authDomain: "ndc-annotation-tool.firebaseapp.com",
+            projectId: "ndc-annotation-tool",
+            storageBucket: "ndc-annotation-tool.appspot.com",
+            messagingSenderId: "30054694568",
+            appId: "1:30054694568:web:3a4900a7430212fcab8c9d",
+            measurementId: "G-MGCTELM2B1"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        function uploadFiles() {
+            var folderInput = document.getElementById('folderInput');
+            var folderNameInput = document.getElementById('folderName');
+            var folderName = folderInput.files[0].webkitRelativePath.split('/')[0];
+            folderNameInput.value = folderName; // 获取文件夹名称
+
+            const folderFiles = folderInput.files;
+            const totalFiles = folderFiles.length;
+            let counter = 0; // 初始化计数器
+
+            if (totalFiles === 0) {
+                document.getElementById('uploadStatus').innerText = 'No files selected.';
+                return;
+            }
+
+            // 逐个上传文件
+            Array.from(folderFiles).forEach(file => {
+                const uploadTask = storage.ref().child(`all_dataset_folder/${folderName}/${file.name}`).put(file);
+
+                uploadTask.on('state_changed',
+                    snapshot => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        document.getElementById('uploadStatus').innerText = `Uploading ${file.name}: ${progress.toFixed(2)}%`;
+                    },
+                    error => {
+                        // 上传失败
+                        document.getElementById('uploadStatus').innerText = `Error uploading ${file.name}: ${error.message}`;
+                    },
+                    () => {
+                        // 上传成功
+                        counter++; // 每上传成功一次，计数器加一
+                        document.getElementById('uploadStatus').innerText = `Upload complete: ${file.name}`;
+
+                        // 判断是否所有文件都上传完成
+                        if (counter === totalFiles) {
+                            // 所有文件上传完成，手动提交表单
+                            document.getElementById('uploadForm').submit();
+                        }
+                    }
+                );
+            });
+        }
+
+        function submitForm() {
+            uploadFiles(); // 调用上传函数
+        }
+    </script>
+</body>
+</html>

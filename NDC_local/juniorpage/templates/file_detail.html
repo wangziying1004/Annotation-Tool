@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Detail</title>
+</head>
+<body>
+    <h3>File Detail</h3>
+    <p><strong>Supervisor:</strong> {{ file_info.supervisor }}</p>
+    <p><strong>File Name:</strong> {{ file_info.file_address.name }}</p>
+    <!-- 这里展示文件内容，假设文件是图片 -->
+    <img src="{{ file_info.file_address.url }}" alt="File Image">
+</body>
+</html>

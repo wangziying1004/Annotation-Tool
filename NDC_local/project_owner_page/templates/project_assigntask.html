@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign People to Levels</title>
+</head>
+<body>
+    <h1>Assign People to Levels</h1>
+    {% if error_message %}
+    <div>{{ error_message }}</div>
+    {% endif %}
+    <form action="{% url 'startproject_assignpeople' username=username project_name=project_name %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="level_number" value="{{ levels|length }}">
+        <input type="hidden" name="max_tasks" value="{{ max_tasks }}">
+        {% for level in levels %}
+        <h2>{{ level }}</h2>
+        <input type="text" id="search_{{ level }}" placeholder="Search username...">
+        <ul id="user_list_{{ level }}">
+            {% for user in all_users %}
+            <li>
+                <input type="checkbox" name="{{ level }}_users" value="{{ user.username }}"> {{ user.username }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+        <button type="submit">Start</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const levels = {{ levels|safe }};
+            levels.forEach(level => {
+                const userList = document.getElementById(`user_list_${level}`);
+                const searchInput = document.getElementById(`search_${level}`);
+
+                searchInput.addEventListener('input', function () {
+                    const searchText = this.value.toLowerCase();
+                    Array.from(userList.children).forEach(user => {
+                        const username = user.innerText.toLowerCase();
+                        if (username.includes(searchText)) {
+                            user.style.display = 'block';
+                        } else {
+                            user.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

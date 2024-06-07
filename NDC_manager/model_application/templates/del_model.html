@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Model</title>
+</head>
+<body>
+    <h1>Delete Model</h1>
+
+    <table border="1">
+        <tr>
+            <th>Model Name</th>
+            <th>Action</th>
+        </tr>
+        {% for model_name in modelnames %}
+        <tr>
+            <td>{{ model_name }}</td>
+            <td>
+                <form method="post" action="{% url 'del_model' username=username %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="modelName" value="{{ model_name }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

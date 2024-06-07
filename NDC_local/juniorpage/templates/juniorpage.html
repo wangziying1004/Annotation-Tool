@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Page</title>
+</head>
+<body>
+    <h1>Welcome, {{ username }}</h1>
+
+    <h2>Project List:</h2>
+    <ul>
+        {% for project in project_list %}
+            <li>
+                Project Name: {{ project.project_name }}<br>
+                Level Set: {{ project.level_set }}<br>
+                Start Date: {{ project.project_start_date }}<br>
+                <form action="{% url 'show_project_functions' username project.project_name %}" method="GET">
+                    <input type="submit" value="Start">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

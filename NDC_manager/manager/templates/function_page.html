@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Functions Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            text-align: left;
+            padding: 10px;
+        }
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            display: inline-block; /* 将按钮转换为内联块元素，使其在同一行显示 */
+        }
+        .button-text {
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Welcome, {{ username }}</h2>
+    </div>
+
+    <div>
+        <span class="button-text">Admin</span>
+        <form action="{% url 'add_functions' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Add_account</button>
+        </form>
+
+        <form action="{% url 'del_functions' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Del_account</button>
+        </form>
+
+        <form action="{% url 'show_functions' username=username %}" method="post" class="button">
+            {% csrf_token %}
+            <button type="submit">Show_account</button>
+        </form>
+
+        <form action="{% url 'update_functions' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Update_account</button>
+        </form>
+    </div>
+
+    <div>
+        <span class="button-text">Dataset</span>
+        <form action="{% url 'add_dataset2' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Add_dataset</button>
+        </form>
+
+        <form action="{% url 'del_dataset' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Del_dataset</button>
+        </form>
+
+        <form action="{% url 'show_dataset' username=username %}" method="post" class="button">
+            {% csrf_token %}
+            <button type="submit">Show_dataset</button>
+        </form>
+
+        <form action="{% url 'update_dataset' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Update_dataset</button>
+        </form>
+    </div>
+
+    <div>
+        <span class="button-text">Model</span>
+        <form action="{% url 'add_model' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Add_model</button>
+        </form>
+
+        <form action="{% url 'del_model' username=username %}" method="get" class="button">
+            {% csrf_token %}
+            <button type="submit">Del_model</button>
+        </form>
+
+        <form action="{% url 'show_model' username=username %}" method="post" class="button">
+            {% csrf_token %}
+            <button type="submit">Show_model</button>
+        </form>
+
+    </div>
+</body>
+</html>

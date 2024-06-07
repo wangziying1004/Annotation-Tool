@@ -1,0 +1,36 @@
+version: "24.0.6"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/NDC_manager_docker
+    ports:
+      - "8000:8000"
+    image: application:NDC_manager_docker
+    container_name: NDC_manager_docker
+    command: gunicorn NDC_manager.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - db
+      - db3
+
+  db:
+    image: mysql:8
+    container_name: db
+    ports:
+      - "3306:3306"
+    volumes:
+      - /usr/local/mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=NDC_manager
+      - MYSQL_ROOT_PASSWORD=password
+
+  db3:
+    image: mysql:8
+    container_name: db3
+    ports:
+      - "3308:3306"
+    volumes:
+      - /usr/local/mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=NDC_local
+      - MYSQL_ROOT_PASSWORD=password

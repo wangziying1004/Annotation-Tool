@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Task for {{ project_name }}</title>
+</head>
+<body>
+    <h1>Please assign task for {{ project_name }}</h1>
+    <form action="{% url 'startproject_setlevelandtask' username=username project_name=project_name %}" method="post">
+        {% csrf_token %}
+        <label for="level_number">Set Level:</label>
+        <input type="number" id="level_number" name="level_number" required><br><br>
+        <label for="max_tasks">Set Max Tasks:</label>
+        <input type="number" id="max_tasks" name="max_tasks" required><br><br>
+        <input type="hidden" name="folder_name" value="{{ folder_name }}">
+        <input type="submit" value="Check">
+    </form>
+</body>
+</html>

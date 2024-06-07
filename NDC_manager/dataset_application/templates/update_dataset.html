@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Dataset</title>
+</head>
+<body>
+    <h1>Update Dataset</h1>
+
+    <table border="1">
+        <tr>
+            <th>Folder List</th>
+            <th>Action</th>
+        </tr>
+        {% for folder_name in folder_list %}
+        <tr>
+            <td>{{ folder_name }}</td>
+            <td>
+                <form method="post" action="{% url 'show_exact_data' username=username folder_name=folder_name%}">
+                    {% csrf_token %}
+                    <input type="hidden" name="folderName" value="{{ folder_name }}">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .signup-link {
+            color: grey;
+            text-decoration: underline;
+            display: block; /* 将链接设置为块级元素 */
+            margin-top: 10px; /* 调整上边距 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login Page</h1>
+        <form method="post" action="/loginpage/">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="user" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="password" name="pwd" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <button type="submit">Admin</button>
+                <a href="/signup/" class="signup-link">Signup</a>
+            </div>
+            <div class="form-group">
+                <label for="user-type">Select user type:</label>
+                <select id="user-type" name="user-type">
+                    <option value="project-owner">Project-owner</option>
+                    <option value="annotator">Annotator</option>
+                </select>
+            </div>
+            <span style="color: red">{{ error_msg }}</span>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Project</title>
+</head>
+<body>
+    <h1>Show Project</h1>
+     <form action="{% url 'export_project' username=username project_name=project_name %}" method="POST" style="display: inline-block;">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="project_name" value="{{ project_name }}">
+        <button type="submit">导出</button>
+    </form>
+
+    <div style="display: inline-block; vertical-align: top; margin-right: 20px;">
+        <h2>Pretrained Dataset List</h2>
+        <ul>
+            {% for item in pretrained_dataset_list %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div style="display: inline-block; vertical-align: top;">
+        <h2>Dataset Received List New</h2>
+        <ul>
+            {% for item in dataset_received_list_new %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Please Train Raw Data</title>
+</head>
+<body>
+    <h1>Please train raw data</h1>
+    <form action="{% url 'pretrain' username=username %}" method="post">
+        {% csrf_token %}
+        <label for="project_name">Project Name:</label>
+        <input type="text" id="project_name" name="project_name" required><br><br>
+
+        <label for="dataset_folder_list">Dataset Folder List:</label>
+        <select id="dataset_folder_list" name="dataset_folder_list">
+            {% for folder in dataset_folder_list %}
+                <option value="{{ folder }}">{{ folder }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="model_list">Model List:</label>
+        <select id="model_list" name="model_list">
+            {% for model in model_list %}
+                <option value="{{ model }}">{{ model }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Pretrain">
+
+    </form>
+</body>
+</html>

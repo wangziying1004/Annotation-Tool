@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <style>
+        /* CSS样式可以根据需要进行修改 */
+        .logout-btn {
+            color: lightgrey;
+            cursor: pointer;
+        }
+        .start-project-btn {
+            background-color: lightgray;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-btn {
+            background-color: lightgrey;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome, {{ username }}</h1>
+        </div>
+        <!-- 添加一个按钮元素，用于注销/logout -->
+        <button class="logout-btn" onclick="logout()">Logout</button>
+
+        <div class="project-list">
+            <h2>Project List</h2>
+            {% for project in project_list %}
+                <div class="project-item" onclick="showProjectDetails('{{ project.project_name }}', '{{ project.project_owner_name }}')">
+                    <a>{{ project.project_name }}</a>
+                    <span>Status:{{ project.status }}</span>
+                    <span>Date: {{ project.project_start_date }}</span>
+                </div>
+                <button class="delete-btn" onclick="deleteProject('{{ project.project_name }}', '{{ project.project_owner_name }}')">Delete</button>
+            {% endfor %}
+        </div>
+
+        <div class="todolist">
+            <h2>To-Do List</h2>
+            {% for todo in todo_list %}
+                <div class="todolist-item" onclick="showTodoDetails('{{ todo.todo_list_name }}','{{ todo.project_owner.project_owner_name }}')">
+                    <a>{{ todo.todo_list_name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button class="start-project-btn" onclick="startProject()">Start Project</button>
+    </div>
+
+    <!-- 添加 JavaScript 代码，处理注销事件和点击事件 -->
+    <script>
+        function logout() {
+            // 点击按钮后重定向到初始界面，这里假设初始界面的 URL 是 '/'
+            window.location.href = '/';
+        }
+
+        function showProjectDetails(projectName, project_owner_name) {
+            var projectName = encodeURIComponent(projectName) ;
+            var projectURL = '/project_owner/' + project_owner_name + '/' + projectName ;
+            window.location.href = projectURL;
+
+            // 这里可以根据需要处理跳转或其他操作
+        }
+
+        function showTodoDetails(todoName,project_owner_name) {
+            var todoName = encodeURIComponent(todoName);
+            var todoURL = '/project_owner/' + project_owner_name + '/' + todoName +'/';
+            window.location.href = todoURL;
+
+            // 这里可以根据需要处理跳转或其他操作
+        }
+        function deleteProject(projectName, projectOwnerName) {
+            var confirmDelete = confirm("Are you sure you want to delete this project?");
+            if (confirmDelete) {
+                var deleteUrl = '/project_owner/' + projectOwnerName + '/' + projectName + '/deleted/';
+                window.location.href = deleteUrl;
+            }
+        }
+        function startProject() {
+            // 获取当前用户名，这里需要将 {{ username }} 替换为实际的用户名变量
+            var username = "{{ username }}";
+            // 拼接启动项目页面的 URL
+            var startProjectUrl = '/project_owner/' + username + '/startproject/';
+            // 跳转到启动项目页面
+            window.location.href = startProjectUrl;
+        }
+    </script>
+</body>
+</html>

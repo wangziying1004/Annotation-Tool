@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload File</title>
+</head>
+<body>
+    <h3>{{ username }}, please upload</h3>
+
+    <!-- 文件上传表单 -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="transferpeople" placeholder="Enter transfer people">
+        <input type="file" name="obj">
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- 显示上传成功信息 -->
+    {% if success_msg %}
+    <p>{{ success_msg }}</p>
+    {% endif %}
+
+    <!-- 显示上传失败信息 -->
+    {% if error_msg %}
+    <p>{{ error_msg }}</p>
+    {% endif %}
+
+    <!-- 显示todolist -->
+    <h3>Todolist</h3>
+    <ul>
+        {% for file_item in file_list %}
+         <li onclick="showOBJ('{{ file_item.supervisor }}', '{{ file_item.myname }}', '{{ file_item.file_address.name }}')">{{ file_item.supervisor }}: <a>{{ file_item.file_address.name }}</a></li>
+
+        {% endfor %}
+    </ul>
+    <script>
+        function showOBJ(supervisor, username, filename) {
+            var encodedFilename = encodeURIComponent(filename);
+            var showOBJ_url = '/juniorpage/' + username + '/' + encodedFilename + '/';
+            window.location.href = showOBJ_url;
+        }
+    </script>
+</body>
+</html>

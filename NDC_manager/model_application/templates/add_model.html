@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Dataset</title>
+</head>
+<body>
+    <h3>{{ username }}, please add model</h3>
+
+    <!-- 文件夹上传表单 -->
+    <form id="uploadForm" method="POST" action="{% url 'add_model' username=username %}" >
+        {% csrf_token %}
+        <input type="file" name="model" id="modelInput">
+        <input type="hidden" id="modelName" name="modelName">
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <!-- 显示上传状态 -->
+    <div id="uploadStatus"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js";></script>
+    <script>
+        // 初始化 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB9d_LpVH9A9OU82xqp0Fuo-XhhjQMbksI",
+            authDomain: "ndc-annotation-tool.firebaseapp.com",
+            projectId: "ndc-annotation-tool",
+            storageBucket: "ndc-annotation-tool.appspot.com",
+            messagingSenderId: "30054694568",
+            appId: "1:30054694568:web:3a4900a7430212fcab8c9d",
+            measurementId: "G-MGCTELM2B1"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const folderName='all_model_folder';
+        function uploadModel() {
+            var modelInput = document.getElementById('modelInput');
+            var modelNameInput = document.getElementById('modelName');
+            var modelName = modelInput.files[0].webkitRelativePath.split('/')[0];
+            console.log(`modelName: ${modelName}`);
+
+            // 获取文件夹名称
+
+            const model = modelInput.files[0];
+            let totalFiles = modelInput.files.length;
+            let counter = 0; // 初始化计数器
+            modelNameInput.value = model.name
+            console.log(`modelNameInput: ${modelNameInput.value}`);
+            if (totalFiles === 0) {
+                document.getElementById('uploadStatus').innerText = 'No files selected.';
+                return;
+            }
+
+            // 逐个上传文件
+
+            const uploadTask = storage.ref().child(`${folderName}/${model.name}`).put(model);
+
+            uploadTask.on('state_changed',
+                snapshot => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    document.getElementById('uploadStatus').innerText = `Uploading ${model.name}: ${progress.toFixed(2)}%`;
+                },
+                error => {
+                        // 上传失败
+                    document.getElementById('uploadStatus').innerText = `Error uploading ${model.name}: ${error.message}`;
+                },
+                () => {
+                        // 上传成功
+                    counter++; // 每上传成功一次，计数器加一
+                    //console.log(`Counter: ${counter}, TotalFiles: ${totalFiles}`);
+                    document.getElementById('uploadStatus').innerText = `Upload complete: ${model.name}`;
+
+                        // 判断是否所有文件都上传完成
+                    if (counter === 1) {
+                            // 所有文件上传完成，手动提交表单
+                        console.log('All files uploaded successfully! Submitting form...');
+                        document.getElementById('uploadForm').submit();
+                    }
+                }
+            );
+        }
+
+        function submitForm() {
+            console.log('uploadmodel');
+            uploadModel(); // 提交表单
+        }
+    </script>
+</body>
+</html>

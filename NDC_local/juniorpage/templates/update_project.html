@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate and Upload File</title>
+    <!-- 引入 Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js";></script>
+</head>
+<body>
+    <h1>Generate and Upload File</h1>
+
+    <button onclick="generateAndUploadFile('{{ file_name }}')">Generate and Upload</button>
+
+    <script>
+        // 初始化 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB9d_LpVH9A9OU82xqp0Fuo-XhhjQMbksI",
+            authDomain: "ndc-annotation-tool.firebaseapp.com",
+            projectId: "ndc-annotation-tool",
+            storageBucket: "ndc-annotation-tool.appspot.com",
+            messagingSenderId: "30054694568",
+            appId: "1:30054694568:web:3a4900a7430212fcab8c9d",
+            measurementId: "G-MGCTELM2B1"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        // 生成并上传文件的函数
+        function generateAndUploadFile(fileName) {
+            const fileContent = 'This is a sample text content for the generated file.';
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+
+            const storageRef = firebase.storage().ref('{{ username }}/{{ project_name }}/' + fileName + '.txt');
+            const uploadTask = storageRef.put(blob);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // 上传中的状态变化，可以在此处显示进度等信息
+                },
+                (error) => {
+                    console.error('Error uploading file:', error);
+                    alert('Error uploading file. Please try again.');
+                },
+                () => {
+                    console.log('File uploaded successfully.');
+                    alert('File uploaded successfully.');
+                }
+            );
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!-- add_function_page.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Function Page</title>
+</head>
+<body>
+    <h1>Add Function</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="annotator_name">Annotator Name:</label>
+        <input type="text" id="annotator_name" name="annotator_name"><br><br>
+        <!--label for="user_type">User Type:</label>
+        <select id="user_type" name="user_type">
+            <option value="annotator">Annotator</option>
+            <option value="project-owner">Project-owner</option>
+        </select><br><br-->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age"><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

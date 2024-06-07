@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Dataset</title>
+</head>
+<body>
+    <h3>{{ username }}, please add dataset</h3>
+
+    <!-- 文件夹上传表单 -->
+    <form id="uploadForm" method="POST" enctype="multipart/form-data" onsubmit="prepareFormData()">
+        {% csrf_token %}
+
+        <input type="file" name="dataset" id="folderInput" webkitdirectory directory multiple>
+        <input type="hidden" id="folderName" name="folderName">
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- 显示上传成功信息 -->
+    {% if success_msg %}
+    <p>{{ success_msg }}</p>
+    {% endif %}
+
+    <!-- 显示上传失败信息 -->
+    {% if error_msg %}
+    <p>{{ error_msg }}</p>
+    {% endif %}
+
+    <script>
+        function prepareFormData() {
+            var folderInput = document.getElementById('folderInput');
+            var folderNameInput = document.getElementById('folderName');
+
+            // 获取文件夹的名称
+            var folderName = folderInput.files[0].webkitRelativePath.split('/')[0];
+            folderNameInput.value = folderName;
+        }
+    </script>
+</body>
+</html>

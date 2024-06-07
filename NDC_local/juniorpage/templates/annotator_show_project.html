@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annotator Show Project</title>
+</head>
+<body>
+    <h1>Welcome, {{ username }}</h1>
+    <h2>Project: {{ project_name }}</h2>
+
+    <h3>Project Data List:</h3>
+    <ul>
+        {% for file_name in project_data_list %}
+            <li>
+                {{ file_name }}
+                <form action="{% url 'annotate_project' username project_name %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="file_name" value="{{ file_name }}">
+                    <input type="submit" value="Annotate">
+                </form>
+                <form action="{% url 'return_file' username project_name %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="file_name" value="{{ file_name }}">
+                    <input type="submit" value="Return">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Todo List:</h3>
+    <ul>
+        {% for todo in todo_list %}
+            <li>
+                {{ todo }}
+                <form action="{% url 'annotate_project' username project_name %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="file_name" value="{{ todo }}">
+                    <input type="submit" value="Annotate">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'show_project_functions' username project_name %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Confirm">
+    </form>
+</body>
+</html>

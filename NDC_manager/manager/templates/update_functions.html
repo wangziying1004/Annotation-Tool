@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update User Information</title>
+</head>
+<body>
+    <h1>Update User Information</h1>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        {% for user in data %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.age}}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                <form action="{% url 'update_functions' username=username %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="old_username" value="{{ user.username }}">
+                    <input type="text" name="new_username" placeholder="New Username">
+                    <input type="text" name="new_password" placeholder="New Password">
+                    <input type="number" name="new_age" placeholder="New Age">
+                    <input type="text" name="new_email" placeholder="New Email">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

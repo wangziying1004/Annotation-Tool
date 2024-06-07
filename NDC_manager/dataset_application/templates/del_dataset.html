@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Dataset</title>
+</head>
+<body>
+    <h1>Delete Dataset</h1>
+
+    <table border="1">
+        <tr>
+            <th>Folder Name</th>
+            <th>Action</th>
+        </tr>
+        {% for folder_name in filenames %}
+        <tr>
+            <td>{{ folder_name }}</td>
+            <td>
+                <form method="post" action="{% url 'del_dataset' username=username %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="folderName" value="{{ folder_name }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

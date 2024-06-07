@@ -1,0 +1,24 @@
+version: "24.0.6"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/NDC_user_docker
+    ports:
+      - "8001:8001"
+    image: application:NDC_user_docker
+    container_name: NDC_user_docker
+    command: gunicorn NDC_local.wsgi:application --bind 0.0.0.0:8001
+    depends_on:
+      - db2
+
+  db2:
+    image: mysql:8
+    container_name: db2
+    ports:
+      - "3307:3306"
+    volumes:
+      - /usr/local/mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=NDC_local
+      - MYSQL_ROOT_PASSWORD=password
